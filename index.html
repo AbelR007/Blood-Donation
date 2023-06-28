@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blood Donation System</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@5.2.3/dist/zephyr/bootstrap.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+    }
+  </style>
+</head>
+<body>
+    <h1 class="text-center p-3"> Blood Donation System </h1>
+    <h3 class="text-center">Add a Donation</h3>
+<form action="/donations" method="POST" class="text-center">
+  <input type="text" name="person" placeholder="Name" class="m-1" required /> <br>
+  <input type="text" name="bloodtype" placeholder="Blood Type" class="m-1" required /> <br>
+  <input type="number" name="litres" placeholder="Litres" class="m-1" required /> <br>
+  <button type="submit" class="btn btn-primary m-3">Submit</button>
+</form>
+<section class="flex">
+    <h3>Recent Donations</h3>
+    <div id='donations_list'></div>
+    <ul class="list-group">
+    <h3>Donations by Blood Type</h3>
+  <li class="list-group-item d-flex justify-content-between align-items-center">
+    A+
+    <span class="badge bg-primary rounded-pill"><div id="a_count"></div></span>
+  </li> 
+  <li class="list-group-item d-flex justify-content-between align-items-center">
+    B+<span class="badge bg-primary rounded-pill"><div id="b_count"></span>
+  </li>
+  <li class="list-group-item d-flex justify-content-between align-items-center">
+    O+<span class="badge bg-primary rounded-pill"><div id="o_count"></span>
+  </li>
+  <li class="list-group-item d-flex justify-content-between align-items-center">
+    AB+<span class="badge bg-primary rounded-pill"><div id="ab_count"></span>
+  </li>
+</ul>
+</section>
+
+  <script>
+  // Fetch data via requests
+  fetch('/donations')
+    .then(response => response.json())
+    .then(data => {
+    const donatorList = data.map(
+      donations => `<li> ${donations.person} of ${donations.bloodtype} blood type, donated ${donations.litres} litres of blood </li>`
+    ).join('');
+    document.getElementById('donations_list').innerHTML = `<ul>${donatorList}</ul>`;
+  })
+    .catch(error => console.error('Error occurred:', error));
+
+    fetch('/donor_a')
+    .then(response => response.json())
+    .then(data=>{
+        const a_sum = data.map(donations => `${donations.sum}`);
+        console.log(a_count);
+        document.getElementById('a_count').innerHTML = `${a_sum}`;
+        })
+    .catch(error => console.error('Error occurred:', error));
+
+    fetch('/donor_b')
+    .then(response => response.json())
+    .then(data=>{
+        const b_sum = data.map(donations => `${donations.sum}`);
+        document.getElementById('b_count').innerHTML = `${b_sum}`;
+        })
+    .catch(error => console.error('Error occurred:', error));
+
+    fetch('/donor_o')
+    .then(response => response.json())
+    .then(data=>{
+        const o_sum = data.map(donations => `${donations.sum}`);
+        document.getElementById('o_count').innerHTML = `${o_sum}`;
+        })
+    .catch(error => console.error('Error occurred:', error));
+
+    fetch('/donor_ab')
+    .then(response => response.json())
+    .then(data=>{
+        const ab_sum = data.map(donations => `${donations.sum}`);
+        document.getElementById('ab_count').innerHTML = `${ab_sum}`;
+        })
+    .catch(error => console.error('Error occurred:', error));
+
+  </script>
+</body>
+</html>
